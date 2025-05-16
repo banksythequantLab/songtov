@@ -1,5 +1,0 @@
-{
-  "use_ollama": true,
-  "ollama_model": "phi3:mini",
-  "ollama_url": "http://localhost:11434"
-}
