@@ -209,6 +209,21 @@ class FastRenderer:
                     "widgets_values": [1, 1]
                 },
                 {
+                    "id": 25,
+                    "type": "PreviewImage",
+                    "pos": [1450, -150],
+                    "size": [360, 400],
+                    "flags": {},
+                    "order": 9,
+                    "mode": 0,
+                    "inputs": [
+                        {"name": "images", "type": "IMAGE", "link": 53}
+                    ],
+                    "outputs": [],
+                    "properties": {"Node name for S&R": "PreviewImage"},
+                    "widgets_values": []
+                },
+                {
                     "id": 27,
                     "type": "SaveImage",
                     "pos": [1843, -154],
@@ -433,7 +448,19 @@ class FastRenderer:
                     self._create_sd3_workflow(workflow_file)
             
             # Load the workflow
-            workflow = self.comfyui.load_workflow(workflow_file)
+            try:
+                workflow = self.comfyui.load_workflow(workflow_file)
+            except Exception as e:
+                logger.error(f"Error loading workflow file: {e}")
+                # Try to fix the workflow
+                from .fix_workflow import fix_workflow_file
+                fixed_workflow_file = workflow_file.replace('.json', '_fixed.json')
+                if fix_workflow_file(workflow_file, fixed_workflow_file):
+                    logger.info(f"Fixed workflow file, using: {fixed_workflow_file}")
+                    workflow_file = fixed_workflow_file
+                    workflow = self.comfyui.load_workflow(workflow_file)
+                else:
+                    return None, f"Failed to load or fix workflow file: {str(e)}"
             
             # Update the prompt with scene description and style
             prompt = f"{scene_description}, {style} style, high quality, detailed"
@@ -501,7 +528,7 @@ class FastRenderer:
             
             # Add random seed
             for node in updated_workflow["nodes"]:
-                if node["type"] == "KSampler" and "widgets_values" in node and len(node["widgets_values"]) > 0:
+                if node["type"] in ["KSampler", "SamplerCustom"] and "widgets_values" in node and len(node["widgets_values"]) > 0:
                     node["widgets_values"][0] = random.randint(0, 9999999999)
             
             # Queue the prompt
@@ -527,6 +554,15 @@ class FastRenderer:
                 # Return first image path
                 return next(iter(image_paths.values())), None
             else:
+                # Try to find images directly in output dir with the prefix
+                try:
+                    if save_node_id is not None and 'output_prefix' in locals():
+                        matching_files = [f for f in os.listdir(output_dir) if f.startswith(output_prefix)]
+                        if matching_files:
+                            return os.path.join(output_dir, matching_files[0]), None
+                except Exception as find_error:
+                    logger.error(f"Error trying to find images in output dir: {find_error}")
+                
                 return None, "No images generated"
             
         except Exception as e:

@@ -1,6 +1,4 @@
 {
-  "id": "1e6003e6-f276-4270-9917-15c47794187c",
-  "revision": 0,
   "last_node_id": 28,
   "last_link_id": 54,
   "nodes": [
@@ -30,10 +28,7 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "EmptyLatentImage",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "EmptyLatentImage"
       },
       "widgets_values": [
         896,
@@ -73,13 +68,10 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "CLIPTextEncode",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A lone motorcycle courier in a red No Mercy Delivery jacket speeding through a neon-lit alley, rain splashing behind him passing a Close-up of a cracked helmet visor reflecting glowing skull holograms from traffic drones"
+        "Scene description goes here, replace at runtime, cinematic style, high quality"
       ]
     },
     {
@@ -114,13 +106,10 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "CLIPTextEncode",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "worst quality, normal quality, low quality, low res, blurry, distortion, watermark, banner, extra digits, cropped, jpeg artifacts, signature, username, error, sketch, duplicate, ugly, monochrome, horror, geometry, mutation, disgusting, bad anatomy, bad proportions, bad quality, deformed, disconnected limbs, out of frame, out of focus, dehydrated, disfigured, extra arms, extra limbs, extra hands, fused fingers, gross proportions, long neck, jpeg, malformed limbs, mutated, mutated hands, mutated limbs, missing arms, missing fingers, picture frame, poorly drawn hands, poorly drawn face, collage, pixel, pixelated, grainy, color aberration, amputee, autograph, bad illustration, beyond the borders, blank background, body out of frame, boring background, branding, cut off, dismembered, disproportioned, distorted, draft, duplicated features, extra fingers, extra legs, fault, flaw, grains, hazy, identifying mark, improper scale, incorrect physiology, incorrect ratio, indistinct, kitsch, low resolution, macabre, malformed, mark, misshapen, missing hands, missing legs, mistake, morbid, mutilated, off-screen, outside the picture, poorly drawn feet, render, repellent, replicate, reproduce, revolting dimensions, shortened, split image, squint, storyboard, tiling, trimmed, unfocused, unattractive, unnatural pose, unreal engine, unsightly, unreadable written language"
+        "worst quality, normal quality, low quality, low res, blurry, distortion, watermark, banner, extra digits, cropped, jpeg artifacts, signature, username, error, sketch, duplicate, ugly, monochrome, horror, geometry, mutation, disgusting, bad anatomy, bad proportions, bad quality, deformed"
       ]
     },
     {
@@ -161,12 +150,8 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "VAEDecode",
-        "widget_ue_connectable": {}
-      },
-      "widgets_values": []
+        "Node name for S&R": "VAEDecode"
+      }
     },
     {
       "id": 13,
@@ -230,10 +215,7 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "SamplerCustom",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "SamplerCustom"
       },
       "widgets_values": [
         true,
@@ -267,10 +249,7 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "KSamplerSelect",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "KSamplerSelect"
       },
       "widgets_values": [
         "euler_ancestral"
@@ -320,10 +299,7 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "CheckpointLoaderSimple",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "CheckpointLoaderSimple"
       },
       "widgets_values": [
         "sd_xl_turbo_1.0_fp16.safetensors"
@@ -361,15 +337,39 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "SDTurboScheduler",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "SDTurboScheduler"
       },
       "widgets_values": [
         1,
         1
       ]
+    },
+    {
+      "id": 25,
+      "type": "PreviewImage",
+      "pos": [
+        1450,
+        -150
+      ],
+      "size": [
+        360,
+        400
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 53
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
     },
     {
       "id": 27,
@@ -394,10 +394,7 @@
       ],
       "outputs": [],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "SaveImage",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
         "MaiVid_Scenes"
@@ -510,7 +507,5 @@
       "IMAGE"
     ]
   ],
-  "groups": [],
-  "config": {},
   "version": 0.4
 }

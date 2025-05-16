@@ -30,10 +30,7 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "EmptyLatentImage",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "EmptyLatentImage"
       },
       "widgets_values": [
         896,
@@ -73,10 +70,7 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "CLIPTextEncode",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
         "A beautiful scene with cinematic lighting, high quality"
@@ -114,10 +108,7 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "CLIPTextEncode",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
         "bad quality, blurry, ugly"
@@ -161,12 +152,8 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "VAEDecode",
-        "widget_ue_connectable": {}
-      },
-      "widgets_values": []
+        "Node name for S&R": "VAEDecode"
+      }
     },
     {
       "id": 13,
@@ -230,10 +217,7 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "SamplerCustom",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "SamplerCustom"
       },
       "widgets_values": [
         true,
@@ -267,10 +251,7 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "KSamplerSelect",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "KSamplerSelect"
       },
       "widgets_values": [
         "euler_ancestral"
@@ -320,10 +301,7 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "CheckpointLoaderSimple",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "CheckpointLoaderSimple"
       },
       "widgets_values": [
         "sd_xl_turbo_1.0_fp16.safetensors"
@@ -361,10 +339,7 @@
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "SDTurboScheduler",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "SDTurboScheduler"
       },
       "widgets_values": [
         1,
@@ -394,10 +369,7 @@
       ],
       "outputs": [],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "PreviewImage",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "PreviewImage"
       },
       "widgets_values": []
     },
@@ -424,10 +396,7 @@
       ],
       "outputs": [],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.33",
-        "Node name for S&R": "SaveImage",
-        "widget_ue_connectable": {}
+        "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
         "outputs/scenes",
@@ -546,6 +515,5 @@
   ],
   "groups": [],
   "config": {},
-  "extra": {},
   "version": 0.4
 }
