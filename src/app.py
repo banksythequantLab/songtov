@@ -104,6 +104,8 @@ except ImportError as e:
         logger.error(f"Failed to import modules: {str(e2)}")
         raise
 
+from flask import Flask, render_template, request, jsonify, send_from_directory
+
 # Set the correct paths relative to this file
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'src', 'frontend', 'templates')
