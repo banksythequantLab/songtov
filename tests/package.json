@@ -1,0 +1,15 @@
+{
+  "name": "maivid-studio-tests",
+  "version": "1.0.0",
+  "description": "Testing suite for MaiVid Studio",
+  "main": "index.js",
+  "scripts": {
+    "test:ui": "node test_fast_renderer_ui.js",
+    "test:integration": "node test_fast_renderer_integration.js",
+    "test": "npm run test:ui && npm run test:integration"
+  },
+  "dependencies": {
+    "puppeteer": "^22.0.0"
+  },
+  "private": true
+}

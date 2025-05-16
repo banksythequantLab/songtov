@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaiVid Studio - Fast Render Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: #333;
+            color: white;
+            padding-top: 20px;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #555;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 10px 20px;
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: #444;
+            color: white;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+        
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background-color: #f8f8f8;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-group.half {
+            flex: 1;
+        }
+        
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .primary-button {
+            background: linear-gradient(90deg, #4a6cf7, #33c8dd);
+            color: white;
+        }
+        
+        .secondary-button {
+            background: #f1f1f1;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .scene-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .scene-card {
+            background: #f9f9f9;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .scene-image {
+            width: 100%;
+            height: 150px;
+            background-color: #eee;
+            object-fit: cover;
+        }
+        
+        .scene-info {
+            padding: 15px;
+        }
+        
+        #sceneResult {
+            margin-top: 20px;
+        }
+        
+        .scene-result-container {
+            display: flex;
+            background: #f5f5f5;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .scene-result-container img {
+            width: 50%;
+            height: 300px;
+            background-color: #ddd;
+            object-fit: cover;
+        }
+        
+        .scene-details {
+            padding: 20px;
+            flex: 1;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .status-bar {
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4a6cf7, #33c8dd);
+            width: 30%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>MaiVid Studio</h2>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#">Home</a>
+            <a href="#">Concept</a>
+            <a href="#">Storyline</a>
+            <a href="#">Scenes</a>
+            <a href="#">Storyboard</a>
+            <a href="#">Timeline</a>
+            <a href="#" class="active">Fast Render</a>
+            <a href="#">Projects</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>Fast Render</h1>
+            <p>Generate music videos with lightning speed using optimized AI models</p>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Generate Music Video from Suno URL</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="sunoUrl">Suno URL:</label>
+                        <input type="text" id="sunoUrl" placeholder="https://suno.com/song/YOUR-SONG-ID" value="https://suno.com/song/H6JQeAvqf4SgiFoF">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="modelType">Model:</label>
+                            <select id="modelType">
+                                <option value="sdxl_turbo">SDXL Turbo (Fastest)</option>
+                                <option value="flux">Flux (Fast)</option>
+                                <option value="sd3">SD 3 (Highest Quality)</option>
+                            </select>
+                        </div>
+                        <div class="form-group half">
+                            <label for="aspectRatio">Aspect Ratio:</label>
+                            <select id="aspectRatio">
+                                <option value="16:9">16:9 (Landscape)</option>
+                                <option value="1:1">1:1 (Square)</option>
+                                <option value="9:16">9:16 (Portrait)</option>
+                                <option value="21:9">21:9 (Ultrawide)</option>
+                                <option value="4:3">4:3 (Classic)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="style">Visual Style:</label>
+                            <select id="style">
+                                <option value="cinematic">Cinematic</option>
+                                <option value="anime">Anime</option>
+                                <option value="realistic">Realistic</option>
+                                <option value="fantasy">Fantasy</option>
+                                <option selected value="cyberpunk">Cyberpunk</option>
+                                <option value="abstract">Abstract</option>
+                                <option value="comic">Comic Book</option>
+                                <option value="noir">Film Noir</option>
+                            </select>
+                        </div>
+                        <div class="form-group half">
+                            <label for="sceneCount">Scene Count:</label>
+                            <select id="sceneCount">
+                                <option value="">Auto (Based on Lyrics)</option>
+                                <option selected value="5">5 Scenes</option>
+                                <option value="8">8 Scenes</option>
+                                <option value="10">10 Scenes</option>
+                                <option value="15">15 Scenes</option>
+                                <option value="20">20 Scenes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button id="generateButton" class="primary-button">Generate Music Video</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="generationProgress" class="card">
+                <div class="card-header">
+                    <h2>Generation Progress</h2>
+                </div>
+                <div class="card-body">
+                    <div class="progress-info">
+                        <div class="status-bar">
+                            <div id="progressBar" class="progress-bar"></div>
+                        </div>
+                        <p id="statusMessage">Downloading song and generating scenes...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="generationResults" class="card">
+                <div class="card-header">
+                    <h2>Generated Music Video</h2>
+                </div>
+                <div class="card-body">
+                    <div id="resultsContent">
+                        <div id="sceneGrid" class="scene-grid">
+                            <!-- Demo scenes -->
+                            <div class="scene-card">
+                                <img src="https://picsum.photos/800/450?random=1" alt="Scene 1" class="scene-image">
+                                <div class="scene-info">
+                                    <h4>Scene 1</h4>
+                                    <p>Neon cityscape with rain and reflections</p>
+                                </div>
+                            </div>
+                            <div class="scene-card">
+                                <img src="https://picsum.photos/800/450?random=2" alt="Scene 2" class="scene-image">
+                                <div class="scene-info">
+                                    <h4>Scene 2</h4>
+                                    <p>Protagonist walking through cyberpunk marketplace</p>
+                                </div>
+                            </div>
+                            <div class="scene-card">
+                                <img src="https://picsum.photos/800/450?random=3" alt="Scene 3" class="scene-image">
+                                <div class="scene-info">
+                                    <h4>Scene 3</h4>
+                                    <p>Close-up of digital interface with holographic display</p>
+                                </div>
+                            </div>
+                            <div class="scene-card">
+                                <img src="https://picsum.photos/800/450?random=4" alt="Scene 4" class="scene-image">
+                                <div class="scene-info">
+                                    <h4>Scene 4</h4>
+                                    <p>Flying vehicles between skyscrapers at night</p>
+                                </div>
+                            </div>
+                            <div class="scene-card">
+                                <img src="https://picsum.photos/800/450?random=5" alt="Scene 5" class="scene-image">
+                                <div class="scene-info">
+                                    <h4>Scene 5</h4>
+                                    <p>Final scene with sunrise over futuristic city</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button id="createVideoButton" class="primary-button">Create Video</button>
+                            <button id="exportScenesButton" class="secondary-button">Export Scenes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Generate Single Scene</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="sceneDescription">Scene Description:</label>
+                        <textarea id="sceneDescription" rows="3" placeholder="Describe the scene you want to generate...">A futuristic cityscape with flying cars and neon signs, cyberpunk style with rain and reflections</textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="singleModelType">Model:</label>
+                            <select id="singleModelType">
+                                <option value="sdxl_turbo">SDXL Turbo (Fastest)</option>
+                                <option value="flux">Flux (Fast)</option>
+                                <option value="sd3">SD 3 (Highest Quality)</option>
+                            </select>
+                        </div>
+                        <div class="form-group half">
+                            <label for="singleAspectRatio">Aspect Ratio:</label>
+                            <select id="singleAspectRatio">
+                                <option value="16:9">16:9 (Landscape)</option>
+                                <option value="1:1">1:1 (Square)</option>
+                                <option value="9:16">9:16 (Portrait)</option>
+                                <option value="21:9">21:9 (Ultrawide)</option>
+                                <option value="4:3">4:3 (Classic)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="singleStyle">Visual Style:</label>
+                        <select id="singleStyle">
+                            <option value="cinematic">Cinematic</option>
+                            <option value="anime">Anime</option>
+                            <option value="realistic">Realistic</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option selected value="cyberpunk">Cyberpunk</option>
+                            <option value="abstract">Abstract</option>
+                            <option value="comic">Comic Book</option>
+                            <option value="noir">Film Noir</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button id="generateSceneButton" class="primary-button">Generate Scene</button>
+                    </div>
+                    
+                    <div id="sceneResult">
+                        <h3>Generated Scene</h3>
+                        <div class="scene-result-container">
+                            <img id="sceneResultImage" src="https://picsum.photos/800/450?random=6" alt="Generated Scene">
+                            <div class="scene-details">
+                                <p id="sceneResultDescription">A futuristic cityscape with flying cars and neon signs, cyberpunk style with rain and reflections</p>
+                                <p><strong>Model:</strong> <span id="sceneResultModel">SDXL Turbo</span></p>
+                                <p><strong>Aspect Ratio:</strong> <span id="sceneResultAspectRatio">16:9</span></p>
+                                <p><strong>Style:</strong> <span id="sceneResultStyle">Cyberpunk</span></p>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="addToProjectButton" class="primary-button">Add to Project</button>
+                            <button id="downloadSceneButton" class="secondary-button">Download Image</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple demo interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle display of elements for demo purposes
+            document.getElementById('generateButton').addEventListener('click', function() {
+                document.getElementById('generationProgress').style.display = 'block';
+                document.getElementById('generationResults').style.display = 'none';
+                
+                // Simulate progress
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 5;
+                    document.getElementById('progressBar').style.width = `${progress}%`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        document.getElementById('generationProgress').style.display = 'none';
+                        document.getElementById('generationResults').style.display = 'block';
+                    }
+                }, 300);
+            });
+            
+            // Scene generation button
+            document.getElementById('generateSceneButton').addEventListener('click', function() {
+                document.getElementById('sceneResult').style.display = 'block';
+                
+                // Update the scene details
+                document.getElementById('sceneResultDescription').textContent = document.getElementById('sceneDescription').value;
+                document.getElementById('sceneResultModel').textContent = document.getElementById('singleModelType').options[document.getElementById('singleModelType').selectedIndex].text;
+                document.getElementById('sceneResultAspectRatio').textContent = document.getElementById('singleAspectRatio').value;
+                document.getElementById('sceneResultStyle').textContent = document.getElementById('singleStyle').options[document.getElementById('singleStyle').selectedIndex].text;
+                
+                // Change the image randomly
+                const random = Math.floor(Math.random() * 10);
+                document.getElementById('sceneResultImage').src = `https://picsum.photos/800/450?random=${random}`;
+            });
+        });
+    </script>
+</body>
+</html>

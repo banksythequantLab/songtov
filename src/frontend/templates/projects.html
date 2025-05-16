@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects - MaiVid Studio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .project-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            height: 100%;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .project-thumbnail {
+            height: 180px;
+            object-fit: cover;
+            width: 100%;
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+        }
+        
+        .project-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .action-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .project-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+            color: white;
+            border-bottom-left-radius: var(--border-radius);
+            border-bottom-right-radius: var(--border-radius);
+        }
+        
+        .project-date {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .create-project-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .create-project-card:hover {
+            background-color: #e9ecef;
+        }
+        
+        .search-bar {
+            margin-bottom: 2rem;
+        }
+        
+        .filters {
+            margin-bottom: 2rem;
+        }
+        
+        .badge-category {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 10px;
+        }
+        
+        .project-progress {
+            height: 5px;
+            margin-top: 10px;
+        }
+        
+        .loading-placeholder {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-dark text-white p-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">MaiVid Studio</h1>
+                <nav>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white active" href="/projects">My Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/profile">My Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <button id="logout-btn" class="btn btn-sm btn-outline-light ms-2">
+                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container my-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>My Projects</h2>
+            <button id="new-project-btn" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>New Project
+            </button>
+        </div>
+        
+        <div class="row mb-4">
+            <!-- Search Bar -->
+            <div class="col-md-8">
+                <div class="search-bar">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" id="search-projects" class="form-control" placeholder="Search projects...">
+                        <button class="btn btn-outline-secondary" type="button" id="clear-search">Clear</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filters -->
+            <div class="col-md-4">
+                <div class="filters d-flex justify-content-end">
+                    <select id="filter-projects" class="form-select">
+                        <option value="all">All Projects</option>
+                        <option value="recent">Recently Updated</option>
+                        <option value="complete">Completed</option>
+                        <option value="in-progress">In Progress</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Loading State -->
+        <div id="loading-projects" class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card loading-placeholder" style="height: 300px;"></div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card loading-placeholder" style="height: 300px;"></div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card loading-placeholder" style="height: 300px;"></div>
+            </div>
+        </div>
+        
+        <!-- Projects Grid -->
+        <div id="projects-grid" class="row" style="display: none;">
+            <!-- Create New Project Card -->
+            <div class="col-md-4 mb-4">
+                <div class="create-project-card" id="create-project-card">
+                    <i class="fas fa-plus-circle fa-3x mb-3 text-primary"></i>
+                    <h3 class="h5">Create New Project</h3>
+                    <p class="text-muted">Start a new AI music video</p>
+                </div>
+            </div>
+            
+            <!-- Sample Project Cards (Will be replaced by dynamic content) -->
+            <div class="col-md-4 mb-4 project-item">
+                <div class="card project-card">
+                    <div class="position-relative">
+                        <img src="{{ url_for('static', filename='img/placeholder-image.png') }}" class="project-thumbnail" alt="Project Thumbnail">
+                        <div class="project-actions">
+                            <div class="action-btn" title="Share Project">
+                                <i class="fas fa-share-alt"></i>
+                            </div>
+                            <div class="action-btn" title="More Options">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h5 class="card-title mb-1">Cinematic Music Video</h5>
+                            <div class="project-date">Last edited: May 12, 2025</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-success badge-category">Completed</span>
+                            <small class="text-muted">3 scenes</small>
+                        </div>
+                        <div class="progress project-progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4 project-item">
+                <div class="card project-card">
+                    <div class="position-relative">
+                        <img src="{{ url_for('static', filename='img/placeholder-image.png') }}" class="project-thumbnail" alt="Project Thumbnail">
+                        <div class="project-actions">
+                            <div class="action-btn" title="Share Project">
+                                <i class="fas fa-share-alt"></i>
+                            </div>
+                            <div class="action-btn" title="More Options">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <h5 class="card-title mb-1">Abstract Animation</h5>
+                            <div class="project-date">Last edited: May 10, 2025</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-warning badge-category">In Progress</span>
+                            <small class="text-muted">5 scenes</small>
+                        </div>
+                        <div class="progress project-progress">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Empty State -->
+        <div id="empty-projects" class="text-center p-5" style="display: none;">
+            <i class="fas fa-film fa-3x mb-3 text-muted"></i>
+            <h3>No Projects Found</h3>
+            <p class="text-muted">You haven't created any projects yet.</p>
+            <button id="empty-create-btn" class="btn btn-primary mt-3">
+                <i class="fas fa-plus me-2"></i>Create Your First Project
+            </button>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white p-3 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2025 MaiVid Studio. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white me-3">Terms of Service</a>
+                    <a href="#" class="text-white me-3">Privacy Policy</a>
+                    <a href="#" class="text-white">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- New Project Modal -->
+    <div class="modal fade" id="new-project-modal" tabindex="-1" aria-labelledby="new-project-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="new-project-modal-label">Create New Project</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="new-project-form">
+                        <div class="mb-3">
+                            <label for="project-name" class="form-label">Project Name</label>
+                            <input type="text" id="project-name" class="form-control" placeholder="Enter a name for your project" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="project-description" class="form-label">Description (Optional)</label>
+                            <textarea id="project-description" class="form-control" rows="3" placeholder="Add a brief description of your project"></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Project Type</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="project-type" id="type-music-video" value="music-video" checked>
+                                    <label class="form-check-label" for="type-music-video">
+                                        Music Video
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="project-type" id="type-lyric-video" value="lyric-video">
+                                    <label class="form-check-label" for="type-lyric-video">
+                                        Lyric Video
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="project-type" id="type-visualizer" value="visualizer">
+                                    <label class="form-check-label" for="type-visualizer">
+                                        Audio Visualizer
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="create-project-btn" type="button" class="btn btn-primary">Create Project</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Project Options Modal -->
+    <div class="modal fade" id="project-options-modal" tabindex="-1" aria-labelledby="project-options-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="project-options-modal-label">Project Options</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="list-group">
+                        <button class="list-group-item list-group-item-action" id="rename-project-btn">
+                            <i class="fas fa-edit me-2"></i>Rename Project
+                        </button>
+                        <button class="list-group-item list-group-item-action" id="duplicate-project-btn">
+                            <i class="fas fa-copy me-2"></i>Duplicate Project
+                        </button>
+                        <button class="list-group-item list-group-item-action" id="export-project-btn">
+                            <i class="fas fa-file-export me-2"></i>Export Project
+                        </button>
+                        <button class="list-group-item list-group-item-action" id="archive-project-btn">
+                            <i class="fas fa-archive me-2"></i>Archive Project
+                        </button>
+                        <button class="list-group-item list-group-item-action text-danger" id="delete-project-btn">
+                            <i class="fas fa-trash me-2"></i>Delete Project
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Share Project Modal -->
+    <div class="modal fade" id="share-project-modal" tabindex="-1" aria-labelledby="share-project-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="share-project-modal-label">Share Project</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="share-link" class="form-label">Share Link</label>
+                        <div class="input-group">
+                            <input type="text" id="share-link" class="form-control" value="https://maivid.studio/p/abc123" readonly>
+                            <button class="btn btn-outline-primary" type="button" id="copy-link-btn">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Share Options</label>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="share-option" id="option-view-only" value="view" checked>
+                            <label class="form-check-label" for="option-view-only">
+                                View only - People can view but not edit
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="share-option" id="option-edit" value="edit">
+                            <label class="form-check-label" for="option-edit">
+                                Edit - People can view and edit
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Share via</label>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-primary" id="share-email-btn">
+                                <i class="fas fa-envelope me-2"></i>Email
+                            </button>
+                            <button class="btn btn-outline-primary" id="share-facebook-btn">
+                                <i class="fab fa-facebook-f me-2"></i>Facebook
+                            </button>
+                            <button class="btn btn-outline-primary" id="share-twitter-btn">
+                                <i class="fab fa-twitter me-2"></i>Twitter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.20.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/9.20.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore-compat.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/projects.js') }}"></script>
+</body>
+</html>

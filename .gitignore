@@ -1,0 +1,51 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Project specific
+uploads/
+*.mp3
+*.wav
+*.mp4
+*.avi
+*.mov
+*.log
+.env
+config.ini
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Mac specific
+.DS_Store

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scenes - MaiVid Studio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="bg-dark text-white p-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">MaiVid Studio</h1>
+                <nav>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/concept">Concept</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/storyline">Storyline</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/settings">Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white active" href="/scenes">Scenes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/storyboard">Storyboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/timeline">Timeline</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/motion">Motion</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container my-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="card-title">Scene Generation</h2>
+                        <p class="card-text">Generate visual scenes for your music video based on your storyline.</p>
+                        
+                        <!-- Storyline Summary -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="h5 mb-0">Storyline Summary</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="storyline-summary">
+                                            <div class="placeholder-glow">
+                                                <p class="placeholder col-7"></p>
+                                                <p class="placeholder col-4"></p>
+                                                <p class="placeholder col-4"></p>
+                                                <p class="placeholder col-6"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Scene Generator -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-info text-white">
+                                        <h3 class="h5 mb-0">Scene Generation</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="scene-list">
+                                            <!-- Scenes will be loaded here -->
+                                            <div class="placeholder-glow">
+                                                <p class="placeholder col-12"></p>
+                                                <p class="placeholder col-12"></p>
+                                                <p class="placeholder col-12"></p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="alert alert-info mt-3">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            Select a scene from the list above to generate or edit it.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Scene Editor -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="h5 mb-0">Scene Editor</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="scene-form">
+                                            <input type="hidden" id="scene-id" value="">
+                                            
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="mb-3">
+                                                        <label for="scene-description" class="form-label">Scene Description</label>
+                                                        <textarea id="scene-description" class="form-control" rows="4" placeholder="Describe the scene in detail..."></textarea>
+                                                    </div>
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="scene-style" class="form-label">Visual Style</label>
+                                                                <select id="scene-style" class="form-select">
+                                                                    <option value="cinematic">Cinematic</option>
+                                                                    <option value="animated">Animated</option>
+                                                                    <option value="abstract">Abstract</option>
+                                                                    <option value="documentary">Documentary</option>
+                                                                    <option value="noir">Film Noir</option>
+                                                                    <option value="fantasy">Fantasy</option>
+                                                                    <option value="sci-fi">Science Fiction</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="scene-duration" class="form-label">Duration (seconds)</label>
+                                                                <input type="number" id="scene-duration" class="form-control" min="1" max="30" value="3">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="scene-motion" class="form-label">Motion Effect</label>
+                                                                <select id="scene-motion" class="form-select">
+                                                                    <option value="zoom">Zoom</option>
+                                                                    <option value="pan">Pan</option>
+                                                                    <option value="ken_burns">Ken Burns</option>
+                                                                    <option value="none">None</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="scene-lyrics" class="form-label">Associated Lyrics</label>
+                                                                <input type="text" id="scene-lyrics" class="form-control" placeholder="Lyrics for this scene...">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-4">
+                                                    <div class="scene-preview-container mb-3 border rounded p-2 text-center bg-light">
+                                                        <p class="mb-2"><small>Scene Preview</small></p>
+                                                        <img id="scene-preview" src="{{ url_for('static', filename='img/placeholder-image.png') }}" class="img-fluid rounded" alt="Scene Preview">
+                                                    </div>
+                                                    
+                                                    <div class="d-grid gap-2">
+                                                        <button type="button" id="generate-scene-btn" class="btn btn-primary">
+                                                            <i class="fas fa-image me-2"></i>Generate Scene Image
+                                                        </button>
+                                                        
+                                                        <button type="button" id="save-scene-btn" class="btn btn-success">
+                                                            <i class="fas fa-save me-2"></i>Save Scene
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button id="ai-settings-btn" class="btn btn-outline-secondary me-md-2">
+                                        <i class="fas fa-cog me-2"></i>AI Director Settings
+                                    </button>
+                                    
+                                    <button id="add-scene-btn" class="btn btn-outline-primary me-md-2">
+                                        <i class="fas fa-plus me-2"></i>Add New Scene
+                                    </button>
+                                    
+                                    <button id="generate-all-scenes-btn" class="btn btn-warning me-md-2">
+                                        <i class="fas fa-bolt me-2"></i>Generate All Scenes
+                                    </button>
+                                    
+                                    <button id="continue-to-video-btn" class="btn btn-success">
+                                        Continue to Video
+                                        <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Workflow Progress -->
+                        <div class="row mt-5">
+                            <div class="col-md-12">
+                                <h3>Workflow Progress</h3>
+                                <div class="progress" style="height: 30px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 12.5%;" aria-valuenow="12.5" aria-valuemin="0" aria-valuemax="100">1. Music</div>
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 12.5%;" aria-valuenow="12.5" aria-valuemin="0" aria-valuemax="100">2. Concept</div>
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 12.5%;" aria-valuenow="12.5" aria-valuemin="0" aria-valuemax="100">3. Storyline</div>
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 12.5%;" aria-valuenow="12.5" aria-valuemin="0" aria-valuemax="100">4. Settings</div>
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 12.5%;" aria-valuenow="12.5" aria-valuemin="0" aria-valuemax="100">5. Scenes</div>
+                                    <div class="progress-bar bg-secondary" role="progressbar" style="width: 12.5%;" aria-valuenow="12.5" aria-valuemin="0" aria-valuemax="100">6. Storyboard</div>
+                                    <div class="progress-bar bg-secondary" role="progressbar" style="width: 12.5%;" aria-valuenow="12.5" aria-valuemin="0" aria-valuemax="100">7. Timeline</div>
+                                    <div class="progress-bar bg-secondary" role="progressbar" style="width: 12.5%;" aria-valuenow="12.5" aria-valuemin="0" aria-valuemax="100">8. Motion</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white p-3 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2025 MaiVid Studio. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white me-3">Terms of Service</a>
+                    <a href="#" class="text-white me-3">Privacy Policy</a>
+                    <a href="#" class="text-white">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Director Settings Modal -->
+    <div class="modal fade" id="aiSettingsModal" tabindex="-1" aria-labelledby="aiSettingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="aiSettingsModalLabel">AI Director Settings</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Configure AI Director to use either the built-in models or local Ollama with Phi-3 Mini.
+                            </div>
+                            
+                            <!-- Model Selection -->
+                            <div class="card mb-4">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Model Selection</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="useOllamaSwitch">
+                                        <label class="form-check-label" for="useOllamaSwitch">Use Ollama with Phi-3 Mini</label>
+                                    </div>
+                                    
+                                    <div id="ollamaSettings" class="border rounded p-3 mt-3" style="display: none;">
+                                        <div class="mb-3">
+                                            <label for="ollamaModel" class="form-label">Ollama Model</label>
+                                            <select id="ollamaModel" class="form-select">
+                                                <option value="phi3:mini">phi3:mini</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="ollamaUrl" class="form-label">Ollama URL</label>
+                                            <input type="text" class="form-control" id="ollamaUrl" value="http://localhost:11434">
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <button id="checkOllamaBtn" class="btn btn-info">
+                                                <i class="fas fa-sync me-2"></i>Check Connection
+                                            </button>
+                                        </div>
+                                        
+                                        <div id="ollamaStatus" class="alert alert-secondary">
+                                            <i class="fas fa-question-circle me-2"></i>
+                                            Ollama connection status unknown. Click "Check Connection" to verify.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Test Generation -->
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Test Generation</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Test the current AI Director configuration with a sample lyric:</p>
+                                    
+                                    <div class="mb-3">
+                                        <label for="testLyrics" class="form-label">Test Lyrics</label>
+                                        <textarea class="form-control" id="testLyrics" rows="3">Walking through the city lights
+Shadows dance on distant heights
+In the darkness we will find
+Echoes of a peace of mind</textarea>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <button id="testGenerationBtn" class="btn btn-primary">
+                                            <i class="fas fa-flask me-2"></i>Test Generation
+                                        </button>
+                                    </div>
+                                    
+                                    <div id="testResults" class="border rounded p-3 mt-3" style="display: none;">
+                                        <h6>Generation Results:</h6>
+                                        <div class="mb-3">
+                                            <p><strong>Story Summary:</strong></p>
+                                            <div id="testSummary" class="border p-2 bg-light" style="max-height: 200px; overflow-y: auto;">
+                                                <!-- Test summary will be displayed here -->
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <p><strong>Scene Prompt:</strong></p>
+                                            <div id="testScenePrompt" class="border p-2 bg-light" style="max-height: 200px; overflow-y: auto;">
+                                                <!-- Test scene prompt will be displayed here -->
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <p><strong>Generated Using:</strong> <span id="testModelType">unknown</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveAiSettingsBtn">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <!-- Ollama Integration JS -->
+    <script src="{{ url_for('static', filename='js/ai_director_settings.js') }}"></script>
+</body>
+</html>

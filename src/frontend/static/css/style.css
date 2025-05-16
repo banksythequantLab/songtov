@@ -1,0 +1,489 @@
+/* MaiVid Studio - Main Stylesheet */
+
+/* Variables */
+:root {
+    /* Apple UI Colors */
+    --apple-blue: #007AFF;
+    --apple-indigo: #5856D6;
+    --apple-purple: #AF52DE;
+    --apple-teal: #5AC8FA;
+    --apple-green: #34C759;
+    --apple-yellow: #FFCC00;
+    --apple-orange: #FF9500;
+    --apple-red: #FF3B30;
+    --apple-gray: #8E8E93;
+    --apple-gray2: #AEAEB2;
+    --apple-gray3: #C7C7CC;
+    --apple-gray4: #D1D1D6;
+    --apple-gray5: #E5E5EA;
+    --apple-gray6: #F2F2F7;
+    
+    --primary-color: var(--apple-blue);
+    --secondary-color: var(--apple-teal);
+    --accent-color: var(--apple-orange);
+    --text-color: #000000;
+    --text-light: #666666;
+    --bg-color: #F5F5F7;
+    --card-color: #ffffff;
+    --border-radius: 10px;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+    --transition-speed: 0.3s;
+    
+    /* Workflow Steps Color Palette */
+    --workflow-bg: var(--apple-gray6);
+    --workflow-active: var(--apple-blue);
+    --workflow-inactive: var(--apple-gray5);
+    --workflow-text-active: #ffffff;
+    --workflow-text: #3a3f47;
+    --workflow-shadow: rgba(0, 0, 0, 0.08);
+}
+
+/* Base Styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+    font-weight: 600;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color var(--transition-speed);
+}
+
+a:hover {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+/* Apple Card Styles */
+.card {
+    border-radius: var(--border-radius);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    background-color: var(--card-color);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    margin-bottom: var(--spacing-lg);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+    background: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 16px 20px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Input Cards */
+.input-card {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    margin-bottom: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.input-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.input-card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: #f0f0f0;
+}
+
+.input-card-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.input-card-body {
+    padding: 20px;
+}
+
+/* Apple Buttons */
+.apple-button {
+    display: inline-block;
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    text-align: center;
+}
+
+.apple-button.primary {
+    background-color: var(--apple-blue);
+    color: white;
+}
+
+.apple-button.primary:hover {
+    background-color: #0071e3;
+    transform: translateY(-1px);
+}
+
+.apple-button.secondary {
+    background-color: var(--apple-gray5);
+    color: var(--text-color);
+}
+
+.apple-button.secondary:hover {
+    background-color: var(--apple-gray4);
+    transform: translateY(-1px);
+}
+
+/* Get Started Box */
+.get-started-box {
+    background: #f0f5ff;
+    border-radius: 10px;
+    padding: 24px;
+    border-left: 4px solid var(--apple-blue);
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 122, 255, 0.2);
+}
+
+.get-started-box h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--apple-blue);
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.get-started-box p {
+    margin-bottom: 0;
+    font-size: 16px;
+}
+
+/* Feature Box */
+.feature-box {
+    background: linear-gradient(to right, #f0f0f7, #ffffff);
+    border-radius: 10px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.feature-box::after {
+    content: 'NEW';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--apple-orange);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.feature-box h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.feature-link {
+    color: var(--apple-blue);
+    font-weight: 500;
+    position: relative;
+}
+
+.feature-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    bottom: -2px;
+    left: 0;
+    background-color: var(--apple-blue);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+    transform-origin: bottom right;
+}
+
+.feature-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* Form Controls */
+.form-control {
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid var(--apple-gray4);
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+    font-size: 15px;
+}
+
+.form-control:focus {
+    border-color: var(--apple-blue);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+    outline: none;
+}
+
+.form-text {
+    color: var(--apple-gray);
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+/* Navigation */
+header nav .nav-link {
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: background-color var(--transition-speed);
+}
+
+header nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+}
+
+header nav .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    font-weight: 500;
+}
+
+/* Progress Bar */
+.progress {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin-bottom: var(--spacing-lg);
+}
+
+.progress-bar {
+    text-align: center;
+    font-weight: 500;
+    padding: 0.25rem 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    header nav .nav {
+        flex-direction: column;
+    }
+    
+    header nav .nav-item {
+        margin-bottom: 0.25rem;
+    }
+    
+    .progress {
+        height: auto !important;
+    }
+    
+    .progress-bar {
+        width: 100% !important;
+    }
+}
+
+/* Custom Components */
+.workflow-step {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.workflow-step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+    margin-right: var(--spacing-md);
+}
+
+.workflow-step-content {
+    flex: 1;
+}
+
+.workflow-step-title {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.workflow-step-description {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+/* Enhanced Workflow Steps - Apple Style */
+.workflow-progress {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    margin: 30px 0;
+    height: auto !important;
+    background: transparent;
+    overflow: visible;
+}
+
+.workflow-progress .progress-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--apple-gray5) !important;
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 14px;
+    padding: 10px 5px;
+    height: 44px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.workflow-step-active {
+    background-color: var(--apple-blue) !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.35) !important;
+    transform: translateY(-3px);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    font-weight: 600;
+    position: relative;
+    z-index: 2;
+}
+
+.workflow-step-completed {
+    background-color: var(--apple-green) !important;
+    color: white !important;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.workflow-step-completed::after {
+    content: '✓';
+    font-weight: bold;
+    margin-left: 5px;
+    font-size: 12px;
+}
+
+/* Apple Card style for all cards */
+.card {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    background-color: white;
+}
+
+.card:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background: #f0f0f0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    padding: 20px 24px;
+}
+
+.card-body {
+    padding: 24px;
+}
+
+/* Showcase Styles */
+.showcase-container {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.showcase-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out, transform 6s ease-out;
+    transform: scale(1.05);
+    z-index: 1; /* Ensures proper stacking */
+    will-change: opacity, transform; /* Performance optimization */
+}
+
+.showcase-image.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2; /* Brings active image to front */
+}
+
+.showcase-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0) 100%);
+    color: white;
+    padding: 15px;
+    font-size: 0.85rem;
+    z-index: 3; /* Ensures caption is always visible */
+}
+
+.showcase-caption strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+}
+
+/* Audio Player Styling */
+audio {
+    width: 100%;
+    border-radius: var(--border-radius);
+}
+
+/* Results Section */
+#results {
+    transition: opacity var(--transition-speed), height var(--transition-speed);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn var(--transition-speed);
+}

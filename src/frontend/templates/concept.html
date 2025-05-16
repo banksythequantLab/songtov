@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concept Development - MaiVid Studio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="bg-dark text-white p-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">MaiVid Studio</h1>
+                <nav>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white active" href="/concept">Concept</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/storyline">Storyline</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/settings">Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/scenes">Scenes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/storyboard">Storyboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/timeline">Timeline</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/motion">Motion</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container my-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="card-title">Concept Development</h2>
+                        <p class="card-text">Generate a concept for your music video based on the lyrics and your preferred style.</p>
+                        
+                        <!-- Audio Player & Lyrics -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="h5 mb-0">Audio Track</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="audio-info">
+                                            <p class="song-title mb-1">Loading song information...</p>
+                                            <p class="song-artist text-muted mb-3">Please wait...</p>
+                                        </div>
+                                        <audio id="audio-player" controls class="w-100 mb-3"></audio>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header bg-secondary text-white">
+                                        <h3 class="h5 mb-0">Extracted Lyrics</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-floating">
+                                            <textarea id="lyrics-text" class="form-control" style="height: 200px;" readonly></textarea>
+                                            <label for="lyrics-text">Lyrics</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Concept Generator -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="h5 mb-0">Generate Video Concept</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text mb-4">Our AI will analyze your song's lyrics and generate a creative concept for your music video. Simply click the button below to let AI suggest a concept tailored to your song.</p>
+                                        
+                                        <div class="d-grid">
+                                            <button type="button" id="generate-concept-btn" class="btn btn-primary">
+                                                <i class="fas fa-magic me-2"></i>Generate AI Concept
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="mt-4 small text-muted">
+                                            <p><i class="fas fa-info-circle me-2"></i>The AI will analyze your lyrics to create a cohesive concept with style, mood, themes, and visual elements.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Concept Results (Initially Hidden) -->
+                        <div id="concept-result" style="display: none;">
+                            <!-- Content will be added by JavaScript -->
+                        </div>
+                        
+                        <!-- Workflow Progress -->
+                        <div class="row mt-5">
+                            <div class="col-md-12">
+                                <h3>Workflow Progress</h3>
+                                <div class="workflow-progress" id="workflow">
+                                    <div class="progress-bar" data-step="1" role="progressbar">1&nbsp;·&nbsp;Music</div>
+                                    <div class="progress-bar" data-step="2" role="progressbar">2&nbsp;·&nbsp;Concept</div>
+                                    <div class="progress-bar" data-step="3" role="progressbar">3&nbsp;·&nbsp;Storyline</div>
+                                    <div class="progress-bar" data-step="4" role="progressbar">4&nbsp;·&nbsp;Settings</div>
+                                    <div class="progress-bar" data-step="5" role="progressbar">5&nbsp;·&nbsp;Scenes</div>
+                                    <div class="progress-bar" data-step="6" role="progressbar">6&nbsp;·&nbsp;Storyboard</div>
+                                    <div class="progress-bar" data-step="7" role="progressbar">7&nbsp;·&nbsp;Timeline</div>
+                                    <div class="progress-bar" data-step="8" role="progressbar">8&nbsp;·&nbsp;Motion</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white p-3 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2025 MaiVid Studio. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white me-3">Terms of Service</a>
+                    <a href="#" class="text-white me-3">Privacy Policy</a>
+                    <a href="#" class="text-white">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

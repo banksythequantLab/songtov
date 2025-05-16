@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - MaiVid Studio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="bg-dark text-white p-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">MaiVid Studio</h1>
+                <nav>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/projects">My Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white active" href="/profile">My Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <button id="logout-btn" class="btn btn-sm btn-outline-light ms-2">
+                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container my-4">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <img id="profile-image" src="{{ url_for('static', filename='img/default-avatar.png') }}" alt="Profile" class="rounded-circle img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/150?text=User'">
+                        </div>
+                        <h3 id="profile-name" class="h4 mb-2">Loading...</h3>
+                        <p id="profile-email" class="text-muted">Loading...</p>
+                        <button id="edit-profile-photo-btn" class="btn btn-sm btn-outline-primary mt-2">
+                            <i class="fas fa-camera me-1"></i>Change Photo
+                        </button>
+                        <input type="file" id="profile-photo-upload" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="h5 mb-0">Account Stats</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span>Projects</span>
+                            <span id="project-count" class="badge bg-primary rounded-pill">0</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span>Videos</span>
+                            <span id="video-count" class="badge bg-success rounded-pill">0</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span>Account Type</span>
+                            <span id="account-type" class="badge bg-info rounded-pill">Free</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Member Since</span>
+                            <span id="member-since" class="text-muted">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-8">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="h5 mb-0">Profile Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="profile-form">
+                            <div class="mb-3">
+                                <label for="display-name" class="form-label">Display Name</label>
+                                <input type="text" id="display-name" class="form-control" placeholder="Your display name">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="bio" class="form-label">Bio</label>
+                                <textarea id="bio" class="form-control" rows="3" placeholder="Tell us about yourself"></textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="website" class="form-label">Website</label>
+                                <input type="url" id="website" class="form-control" placeholder="Your website URL">
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="h5 mb-0">Account Settings</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="account-form">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" id="email" class="form-control" placeholder="Your email address" readonly>
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>To change your email, please contact support.
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="new-password" class="form-label">New Password</label>
+                                <input type="password" id="new-password" class="form-control" placeholder="Leave blank to keep current password">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="confirm-password" class="form-label">Confirm New Password</label>
+                                <input type="password" id="confirm-password" class="form-control" placeholder="Confirm your new password">
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-key me-2"></i>Update Password
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-danger text-white">
+                        <h3 class="h5 mb-0">Danger Zone</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-3">These actions are permanent and cannot be undone.</p>
+                        
+                        <div class="d-grid gap-2 d-md-flex">
+                            <button id="delete-account-btn" class="btn btn-outline-danger">
+                                <i class="fas fa-trash me-2"></i>Delete Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white p-3 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2025 MaiVid Studio. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white me-3">Terms of Service</a>
+                    <a href="#" class="text-white me-3">Privacy Policy</a>
+                    <a href="#" class="text-white">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Delete Account Confirmation Modal -->
+    <div class="modal fade" id="delete-account-modal" tabindex="-1" aria-labelledby="delete-account-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="delete-account-modal-label">Delete Account Confirmation</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
+                    <p>All your projects, videos, and personal data will be permanently deleted.</p>
+                    <div class="mb-3">
+                        <label for="confirm-delete-email" class="form-label">Please enter your email to confirm:</label>
+                        <input type="email" id="confirm-delete-email" class="form-control" placeholder="your.email@example.com">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="confirm-delete-account-btn" type="button" class="btn btn-danger">Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.20.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/9.20.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase Storage -->
+    <script src="https://www.gstatic.com/firebasejs/9.20.0/firebase-storage-compat.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+</body>
+</html>

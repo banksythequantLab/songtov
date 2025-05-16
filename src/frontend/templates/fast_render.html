@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Render - MaiVid Studio</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/fast_render.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>MaiVid Studio</h2>
+        </div>
+        <div class="sidebar-menu">
+            <a href="/"><i class="fas fa-home"></i> Home</a>
+            <a href="/concept"><i class="fas fa-lightbulb"></i> Concept</a>
+            <a href="/storyline"><i class="fas fa-book"></i> Storyline</a>
+            <a href="/scenes"><i class="fas fa-film"></i> Scenes</a>
+            <a href="/storyboard"><i class="fas fa-images"></i> Storyboard</a>
+            <a href="/timeline"><i class="fas fa-clock"></i> Timeline</a>
+            <a href="/fast_render" class="active"><i class="fas fa-bolt"></i> Fast Render</a>
+            <a href="/projects"><i class="fas fa-folder"></i> Projects</a>
+            <a href="/login" id="loginLink"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="/profile" id="profileLink" style="display: none;"><i class="fas fa-user"></i> Profile</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1><i class="fas fa-bolt"></i> Fast Render</h1>
+            <p>Generate music videos with lightning speed using optimized AI models</p>
+        </div>
+
+        <!-- Workflow Progress -->
+        <div class="workflow-container">
+            <h3>Workflow Progress</h3>
+            <div class="workflow-progress" id="workflow">
+                <div class="progress-bar" data-step="1" role="progressbar">1&nbsp;·&nbsp;Music</div>
+                <div class="progress-bar" data-step="2" role="progressbar">2&nbsp;·&nbsp;Concept</div>
+                <div class="progress-bar" data-step="3" role="progressbar">3&nbsp;·&nbsp;Storyline</div>
+                <div class="progress-bar" data-step="4" role="progressbar">4&nbsp;·&nbsp;Settings</div>
+                <div class="progress-bar" data-step="5" role="progressbar">5&nbsp;·&nbsp;Scenes</div>
+                <div class="progress-bar" data-step="6" role="progressbar">6&nbsp;·&nbsp;Storyboard</div>
+                <div class="progress-bar" data-step="7" role="progressbar">7&nbsp;·&nbsp;Timeline</div>
+                <div class="progress-bar" data-step="8" role="progressbar">8&nbsp;·&nbsp;Motion</div>
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Generate Music Video from Suno URL</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="sunoUrl">Suno URL:</label>
+                        <input type="text" id="sunoUrl" placeholder="https://suno.com/song/YOUR-SONG-ID">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="modelType">Model:</label>
+                            <select id="modelType">
+                                <option value="sdxl_turbo">SDXL Turbo (Fastest)</option>
+                                <option value="flux">Flux (Fast)</option>
+                                <option value="sd3">SD 3 (Highest Quality)</option>
+                            </select>
+                        </div>
+                        <div class="form-group half">
+                            <label for="aspectRatio">Aspect Ratio:</label>
+                            <select id="aspectRatio">
+                                <option value="16:9">16:9 (Landscape)</option>
+                                <option value="1:1">1:1 (Square)</option>
+                                <option value="9:16">9:16 (Portrait)</option>
+                                <option value="21:9">21:9 (Ultrawide)</option>
+                                <option value="4:3">4:3 (Classic)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="style">Visual Style:</label>
+                            <select id="style">
+                                <option value="cinematic">Cinematic</option>
+                                <option value="anime">Anime</option>
+                                <option value="realistic">Realistic</option>
+                                <option value="fantasy">Fantasy</option>
+                                <option value="cyberpunk">Cyberpunk</option>
+                                <option value="abstract">Abstract</option>
+                                <option value="comic">Comic Book</option>
+                                <option value="noir">Film Noir</option>
+                            </select>
+                        </div>
+                        <div class="form-group half">
+                            <label for="sceneCount">Scene Count:</label>
+                            <select id="sceneCount">
+                                <option value="">Auto (Based on Lyrics)</option>
+                                <option value="5">5 Scenes</option>
+                                <option value="8">8 Scenes</option>
+                                <option value="10">10 Scenes</option>
+                                <option value="15">15 Scenes</option>
+                                <option value="20">20 Scenes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button id="generateButton" class="primary-button"><i class="fas fa-bolt"></i> Generate Music Video</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="generationProgress" class="card" style="display: none;">
+                <div class="card-header">
+                    <h2>Generation Progress</h2>
+                </div>
+                <div class="card-body">
+                    <div class="progress-info">
+                        <div class="status-bar">
+                            <div id="progressBar" class="progress-bar"></div>
+                        </div>
+                        <p id="statusMessage">Downloading song and generating scenes...</p>
+                    </div>
+                    
+                    <div id="metadataSection" style="display: none;">
+                        <h3>Song Metadata</h3>
+                        <div id="songMetadata" class="metadata-grid"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="generationResults" class="card" style="display: none;">
+                <div class="card-header">
+                    <h2>Generated Music Video</h2>
+                </div>
+                <div class="card-body">
+                    <div id="resultsContent">
+                        <div id="sceneGrid" class="scene-grid"></div>
+                        
+                        <div class="action-buttons">
+                            <button id="createVideoButton" class="primary-button"><i class="fas fa-video"></i> Create Video</button>
+                            <button id="exportScenesButton" class="secondary-button"><i class="fas fa-download"></i> Export Scenes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Generate Single Scene</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="sceneDescription">Scene Description:</label>
+                        <textarea id="sceneDescription" rows="3" placeholder="Describe the scene you want to generate..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="singleModelType">Model:</label>
+                            <select id="singleModelType">
+                                <option value="sdxl_turbo">SDXL Turbo (Fastest)</option>
+                                <option value="flux">Flux (Fast)</option>
+                                <option value="sd3">SD 3 (Highest Quality)</option>
+                            </select>
+                        </div>
+                        <div class="form-group half">
+                            <label for="singleAspectRatio">Aspect Ratio:</label>
+                            <select id="singleAspectRatio">
+                                <option value="16:9">16:9 (Landscape)</option>
+                                <option value="1:1">1:1 (Square)</option>
+                                <option value="9:16">9:16 (Portrait)</option>
+                                <option value="21:9">21:9 (Ultrawide)</option>
+                                <option value="4:3">4:3 (Classic)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="singleStyle">Visual Style:</label>
+                        <select id="singleStyle">
+                            <option value="cinematic">Cinematic</option>
+                            <option value="anime">Anime</option>
+                            <option value="realistic">Realistic</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="cyberpunk">Cyberpunk</option>
+                            <option value="abstract">Abstract</option>
+                            <option value="comic">Comic Book</option>
+                            <option value="noir">Film Noir</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button id="generateSceneButton" class="primary-button"><i class="fas fa-image"></i> Generate Scene</button>
+                    </div>
+                    
+                    <div id="sceneResult" style="display: none;">
+                        <h3>Generated Scene</h3>
+                        <div class="scene-result-container">
+                            <img id="sceneResultImage" src="" alt="Generated Scene">
+                            <div class="scene-details">
+                                <p id="sceneResultDescription"></p>
+                                <p><strong>Model:</strong> <span id="sceneResultModel"></span></p>
+                                <p><strong>Aspect Ratio:</strong> <span id="sceneResultAspectRatio"></span></p>
+                                <p><strong>Style:</strong> <span id="sceneResultStyle"></span></p>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="addToProjectButton" class="primary-button"><i class="fas fa-plus"></i> Add to Project</button>
+                            <button id="downloadSceneButton" class="secondary-button"><i class="fas fa-download"></i> Download Image</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/fast_render.js"></script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaiVid Studio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="bg-dark text-white p-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">MaiVid Studio</h1>
+                <nav>
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-white active" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/concept">Concept</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/storyline">Storyline</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/settings">Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/scenes">Scenes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/storyboard">Storyboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/timeline">Timeline</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/motion">Motion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/fast_render">Fast Render</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container my-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h2 class="card-title">Welcome to MaiVid Studio</h2>
+                                <p class="card-text">Create stunning AI-generated music videos from your songs.</p>
+                                
+                                <!-- Get Started Box -->
+                                <div class="get-started-box">
+                                    <h4>Get Started</h4>
+                                    <p>Start by providing a music URL or uploading an audio file to generate a music video.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Rotating Showcase - Upper Right -->
+                            <div class="col-md-4">
+                                <div class="showcase-container" id="showcase">
+                                    <!-- Images will be populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="input-card">
+                                    <div class="input-card-header">
+                                        <h3>Music URL Import</h3>
+                                    </div>
+                                    <div class="input-card-body">
+                                        <form id="url-form">
+                                            <div class="mb-3">
+                                                <label for="music-url" class="form-label">Music URL</label>
+                                                <input type="url" class="form-control" id="music-url" name="url" placeholder="https://suno.com/song/...">
+                                                <div class="form-text">Enter a URL from Suno or other supported platforms.</div>
+                                            </div>
+                                            <button type="submit" class="apple-button primary">
+                                                <i class="fas fa-download me-2"></i>Download Music
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="input-card">
+                                    <div class="input-card-header">
+                                        <h3>Audio Upload</h3>
+                                    </div>
+                                    <div class="input-card-body">
+                                        <form id="upload-form">
+                                            <div class="mb-3">
+                                                <label for="audio-file" class="form-label">Audio File</label>
+                                                <input type="file" class="form-control" id="audio-file" accept=".mp3,.wav,.ogg">
+                                                <div class="form-text">Upload an MP3, WAV, or OGG file.</div>
+                                            </div>
+                                            <button type="submit" class="apple-button secondary">
+                                                <i class="fas fa-upload me-2"></i>Upload Audio
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-box mt-4">
+                            <h4>NEW! Fast Render Mode</h4>
+                            <p>Try our new <a href="/fast_render" class="feature-link">Fast Render</a> feature for rapid music video generation using optimized AI models. Go from Suno URL to complete music video in minutes!</p>
+                            <p class="mb-0">Perfect for quick prototyping and testing different styles before final production.</p>
+                        </div>
+                        
+                        <div id="results" class="mt-4" style="display: none;">
+                            <h3>Processing Results</h3>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Audio Information</h4>
+                                            <dl class="row">
+                                                <dt class="col-sm-3">Title:</dt>
+                                                <dd class="col-sm-9" id="result-title">-</dd>
+                                                
+                                                <dt class="col-sm-3">Artist:</dt>
+                                                <dd class="col-sm-9" id="result-artist">-</dd>
+                                                
+                                                <dt class="col-sm-3">Duration:</dt>
+                                                <dd class="col-sm-9" id="result-duration">-</dd>
+                                            </dl>
+                                            
+                                            <div class="mb-3">
+                                                <audio id="audio-player" controls class="w-100"></audio>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <h4>Extracted Lyrics</h4>
+                                            <div class="form-floating">
+                                                <textarea class="form-control" id="lyrics-text" style="height: 200px;"></textarea>
+                                                <label for="lyrics-text">Lyrics (can be edited)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                                        <button id="continue-btn" class="btn btn-success">
+                                            Continue to Concept Development
+                                            <i class="fas fa-arrow-right ms-2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Workflow Steps -->
+                        <div class="row mt-5">
+                            <div class="col-md-12">
+                                <h3>Workflow Steps</h3>
+                                <div class="workflow-progress" id="workflow">
+                                    <div class="progress-bar" data-step="1" role="progressbar">1&nbsp;·&nbsp;Music</div>
+                                    <div class="progress-bar" data-step="2" role="progressbar">2&nbsp;·&nbsp;Concept</div>
+                                    <div class="progress-bar" data-step="3" role="progressbar">3&nbsp;·&nbsp;Storyline</div>
+                                    <div class="progress-bar" data-step="4" role="progressbar">4&nbsp;·&nbsp;Settings</div>
+                                    <div class="progress-bar" data-step="5" role="progressbar">5&nbsp;·&nbsp;Scenes</div>
+                                    <div class="progress-bar" data-step="6" role="progressbar">6&nbsp;·&nbsp;Storyboard</div>
+                                    <div class="progress-bar" data-step="7" role="progressbar">7&nbsp;·&nbsp;Timeline</div>
+                                    <div class="progress-bar" data-step="8" role="progressbar">8&nbsp;·&nbsp;Motion</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white p-3 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2025 MaiVid Studio. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white me-3">Terms of Service</a>
+                    <a href="#" class="text-white me-3">Privacy Policy</a>
+                    <a href="#" class="text-white">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
