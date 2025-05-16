@@ -14,43 +14,17 @@ import random
 import threading
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple, Any, Union
+from pathlib import Path
 
-# Initialize logging first to ensure it's available for all operations
+# Flask imports
+from flask import Flask, request, jsonify, render_template, redirect, url_for, send_from_directory
+
+# Initialize logging
 logging.basicConfig(
     level=logging.DEBUG,  # Set to DEBUG for more detailed logs
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
-# Simple fallback for Path - define before trying to import pathlib
-class PathFallback:
-    def __init__(self, path):
-        self.path = str(path)
-    def __str__(self):
-        return self.path
-    def __repr__(self):
-        return f"Path('{self.path}')"
-    def __truediv__(self, other):
-        return PathFallback(self.path + '/' + str(other))
-    def joinpath(self, *other):
-        return PathFallback(self.path + '/' + '/'.join(str(o) for o in other))
-    @property
-    def name(self):
-        return os.path.basename(self.path)
-    @property
-    def parent(self):
-        return PathFallback(os.path.dirname(self.path))
-    def exists(self):
-        return os.path.exists(self.path)
-
-# Try to import pathlib
-try:
-    from pathlib import Path
-    logger.info("Successfully imported pathlib.Path")
-except ImportError:
-    logger.warning("pathlib.Path not available, using fallback implementation")
-    # Use the fallback implementation
-    Path = PathFallback
 
 # Try to load dotenv package
 try:
@@ -68,23 +42,9 @@ except ImportError:
     except Exception as e:
         logger.error(f"Error loading .env file manually: {str(e)}")
 
-# Safe chmod function that checks if chmod is available - moved after logging setup
-def safe_chmod(path, mode):
-    """Safe chmod function that works in restricted environments."""
-    # Check if chmod is available in the os module
-    if not hasattr(os, 'chmod'):
-        logger.warning(f"os.chmod not available in this environment - skipping permissions for {path}")
-        return
-    
-    try:
-        os.chmod(path, mode)
-    except Exception as e:
-        logger.warning(f"Could not set permissions for {path}: {str(e)}")
-
 # Import our modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 try:
-    # Try absolute imports first
     from src.backend.audio.processor import download_from_url, extract_lyrics, clean_lyrics
     from src.backend.comfyui.interface import ComfyUIInterface
     from src.backend.comfyui.fast_renderer import FastRenderer
@@ -93,10 +53,9 @@ try:
     from src.backend.video.progress_tracker import progress_tracker
     from src.backend.generation.music_video_generator import generate_music_video_from_url, MusicVideoGenerator
     from src.backend.generation.video_generator import VideoGenerator
-except ImportError as e:
-    logger.warning(f"Failed to import modules with 'src' prefix: {str(e)}")
+except ImportError:
     try:
-        # Alternative import path without 'src' prefix
+        # Alternative import path
         from backend.audio.processor import download_from_url, extract_lyrics, clean_lyrics
         from backend.comfyui.interface import ComfyUIInterface
         from backend.comfyui.fast_renderer import FastRenderer
@@ -105,11 +64,9 @@ except ImportError as e:
         from backend.video.progress_tracker import progress_tracker
         from backend.generation.music_video_generator import generate_music_video_from_url, MusicVideoGenerator
         from backend.generation.video_generator import VideoGenerator
-    except ImportError as e2:
-        logger.error(f"Failed to import modules: {str(e2)}")
+    except ImportError as e:
+        logger.error(f"Failed to import modules: {str(e)}")
         raise
-
-from flask import Flask, render_template, request, jsonify, send_from_directory
 
 # Set the correct paths relative to this file
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -135,6 +92,10 @@ def add_cors_headers(response):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
     return response
+
+# Load environment variables
+from dotenv import load_dotenv
+load_dotenv()
 
 # Initialize components
 comfyui = ComfyUIInterface(os.getenv('COMFYUI_URL', 'http://127.0.0.1:8188'))
@@ -174,12 +135,8 @@ try:
     from src.backend.api.register import register_blueprints
     register_blueprints(app)
 except ImportError as e:
-    try:
-        from backend.api.register import register_blueprints
-        register_blueprints(app)
-    except ImportError as e2:
-        logger.error(f"Failed to import blueprints: {str(e2)}")
-        pass
+    logger.error(f"Failed to import blueprints: {str(e)}")
+    pass
 
 
 def allowed_file(filename: str) -> bool:
