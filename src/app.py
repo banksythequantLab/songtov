@@ -42,9 +42,19 @@ except ImportError:
     except Exception as e:
         logger.error(f"Error loading .env file manually: {str(e)}")
 
+# Safe chmod function that checks if chmod is available
+def safe_chmod(path, mode):
+    """Safe chmod function that works in restricted environments."""
+    try:
+        if hasattr(os, 'chmod'):
+            os.chmod(path, mode)
+    except Exception as e:
+        logger.warning(f"Could not set permissions for {path}: {str(e)}")
+
 # Import our modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 try:
+    # Try absolute imports first
     from src.backend.audio.processor import download_from_url, extract_lyrics, clean_lyrics
     from src.backend.comfyui.interface import ComfyUIInterface
     from src.backend.comfyui.fast_renderer import FastRenderer
@@ -53,9 +63,10 @@ try:
     from src.backend.video.progress_tracker import progress_tracker
     from src.backend.generation.music_video_generator import generate_music_video_from_url, MusicVideoGenerator
     from src.backend.generation.video_generator import VideoGenerator
-except ImportError:
+except ImportError as e:
+    logger.warning(f"Failed to import modules with 'src' prefix: {str(e)}")
     try:
-        # Alternative import path
+        # Alternative import path without 'src' prefix
         from backend.audio.processor import download_from_url, extract_lyrics, clean_lyrics
         from backend.comfyui.interface import ComfyUIInterface
         from backend.comfyui.fast_renderer import FastRenderer
@@ -64,8 +75,8 @@ except ImportError:
         from backend.video.progress_tracker import progress_tracker
         from backend.generation.music_video_generator import generate_music_video_from_url, MusicVideoGenerator
         from backend.generation.video_generator import VideoGenerator
-    except ImportError as e:
-        logger.error(f"Failed to import modules: {str(e)}")
+    except ImportError as e2:
+        logger.error(f"Failed to import modules: {str(e2)}")
         raise
 
 # Set the correct paths relative to this file
@@ -94,8 +105,9 @@ def add_cors_headers(response):
     return response
 
 # Load environment variables
-from dotenv import load_dotenv
-load_dotenv()
+# Note: This is already done above, no need to do it twice
+# from dotenv import load_dotenv
+# load_dotenv()
 
 # Initialize components
 comfyui = ComfyUIInterface(os.getenv('COMFYUI_URL', 'http://127.0.0.1:8188'))
@@ -135,8 +147,12 @@ try:
     from src.backend.api.register import register_blueprints
     register_blueprints(app)
 except ImportError as e:
-    logger.error(f"Failed to import blueprints: {str(e)}")
-    pass
+    try:
+        from backend.api.register import register_blueprints
+        register_blueprints(app)
+    except ImportError as e2:
+        logger.error(f"Failed to import blueprints: {str(e2)}")
+        pass
 
 
 def allowed_file(filename: str) -> bool:
