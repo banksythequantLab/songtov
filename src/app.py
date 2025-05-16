@@ -15,37 +15,42 @@ import threading
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple, Any, Union
 
-# Try to import pathlib
-try:
-    from pathlib import Path
-except ImportError:
-    # Simple fallback for Path if not available
-    class Path:
-        def __init__(self, path):
-            self.path = str(path)
-        def __str__(self):
-            return self.path
-        def __repr__(self):
-            return f"Path('{self.path}')"
-        def __truediv__(self, other):
-            return Path(self.path + '/' + str(other))
-        def joinpath(self, *other):
-            return Path(self.path + '/' + '/'.join(str(o) for o in other))
-        @property
-        def name(self):
-            return os.path.basename(self.path)
-        @property
-        def parent(self):
-            return Path(os.path.dirname(self.path))
-        def exists(self):
-            return os.path.exists(self.path)
-
-# Initialize logging
+# Initialize logging first to ensure it's available for all operations
 logging.basicConfig(
     level=logging.DEBUG,  # Set to DEBUG for more detailed logs
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Simple fallback for Path - define before trying to import pathlib
+class PathFallback:
+    def __init__(self, path):
+        self.path = str(path)
+    def __str__(self):
+        return self.path
+    def __repr__(self):
+        return f"Path('{self.path}')"
+    def __truediv__(self, other):
+        return PathFallback(self.path + '/' + str(other))
+    def joinpath(self, *other):
+        return PathFallback(self.path + '/' + '/'.join(str(o) for o in other))
+    @property
+    def name(self):
+        return os.path.basename(self.path)
+    @property
+    def parent(self):
+        return PathFallback(os.path.dirname(self.path))
+    def exists(self):
+        return os.path.exists(self.path)
+
+# Try to import pathlib
+try:
+    from pathlib import Path
+    logger.info("Successfully imported pathlib.Path")
+except ImportError:
+    logger.warning("pathlib.Path not available, using fallback implementation")
+    # Use the fallback implementation
+    Path = PathFallback
 
 # Try to load dotenv package
 try:
@@ -63,10 +68,10 @@ except ImportError:
     except Exception as e:
         logger.error(f"Error loading .env file manually: {str(e)}")
 
-# Safe chmod function that checks if chmod is available
+# Safe chmod function that checks if chmod is available - moved after logging setup
 def safe_chmod(path, mode):
     """Safe chmod function that works in restricted environments."""
-    # Only attempt to use chmod if it exists in the os module
+    # Check if chmod is available in the os module
     if not hasattr(os, 'chmod'):
         logger.warning(f"os.chmod not available in this environment - skipping permissions for {path}")
         return
@@ -130,11 +135,6 @@ def add_cors_headers(response):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
     return response
-
-# Load environment variables
-# Note: This is already done above, no need to do it twice
-# from dotenv import load_dotenv
-# load_dotenv()
 
 # Initialize components
 comfyui = ComfyUIInterface(os.getenv('COMFYUI_URL', 'http://127.0.0.1:8188'))
