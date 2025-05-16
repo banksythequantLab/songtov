@@ -14,10 +14,31 @@ import random
 import threading
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple, Any, Union
-from pathlib import Path
 
-# Flask imports
-from flask import Flask, request, jsonify, render_template, redirect, url_for, send_from_directory
+# Try to import pathlib
+try:
+    from pathlib import Path
+except ImportError:
+    # Simple fallback for Path if not available
+    class Path:
+        def __init__(self, path):
+            self.path = str(path)
+        def __str__(self):
+            return self.path
+        def __repr__(self):
+            return f"Path('{self.path}')"
+        def __truediv__(self, other):
+            return Path(self.path + '/' + str(other))
+        def joinpath(self, *other):
+            return Path(self.path + '/' + '/'.join(str(o) for o in other))
+        @property
+        def name(self):
+            return os.path.basename(self.path)
+        @property
+        def parent(self):
+            return Path(os.path.dirname(self.path))
+        def exists(self):
+            return os.path.exists(self.path)
 
 # Initialize logging
 logging.basicConfig(
@@ -45,9 +66,13 @@ except ImportError:
 # Safe chmod function that checks if chmod is available
 def safe_chmod(path, mode):
     """Safe chmod function that works in restricted environments."""
+    # Only attempt to use chmod if it exists in the os module
+    if not hasattr(os, 'chmod'):
+        logger.warning(f"os.chmod not available in this environment - skipping permissions for {path}")
+        return
+    
     try:
-        if hasattr(os, 'chmod'):
-            os.chmod(path, mode)
+        os.chmod(path, mode)
     except Exception as e:
         logger.warning(f"Could not set permissions for {path}: {str(e)}")
 
